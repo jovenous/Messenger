@@ -1,6 +1,8 @@
 package com.example.messenger;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -17,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView textViewRegister;
     private Button buttonLogin;
 
+    private LoginViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +30,23 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initViews();
+
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        observeViewModel();
+
+        setupClickListeners();
+
+
+    }
+
+    private void setupClickListeners() {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
-                // Login
+                viewModel.login(email, password);
             }
         });
 
@@ -39,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = ForgotPasswordActivity.newIntent(
                         LoginActivity.this,
                         editTextEmail.getText().toString().trim()
-                        );
+                );
                 startActivity(intent);
             }
         });
@@ -51,7 +68,31 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
+    private void observeViewModel() {
+        viewModel.getError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String errorMessage) {
+                if (errorMessage != null) {
+                    Toast.makeText(
+                            LoginActivity.this,
+                            errorMessage,
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+        });
+        viewModel.getUser().observe(this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(FirebaseUser firebaseUser) {
+                if (firebaseUser != null) {
+                    Intent intent = UsersActivity.newIntent(LoginActivity.this);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
     }
 
     private void initViews() {
