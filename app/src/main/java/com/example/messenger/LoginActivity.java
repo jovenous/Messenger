@@ -47,7 +47,21 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
-                viewModel.login(email, password);
+                if (email.isEmpty()) {
+                    editTextEmail.setError("Fill the field!");
+                    editTextEmail.setBackgroundResource(R.drawable.error_background);
+                } else {
+                    editTextEmail.setBackgroundResource(R.drawable.normal_background);
+                }
+                if (password.isEmpty()) {
+                    editTextPassword.setError("Fill the field!");
+                    editTextPassword.setBackgroundResource(R.drawable.error_background);
+                } else {
+                    editTextPassword.setBackgroundResource(R.drawable.normal_background);
+                }
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    viewModel.login(email, password);
+                }
             }
         });
 
@@ -107,4 +121,5 @@ public class LoginActivity extends AppCompatActivity {
         textViewRegister = findViewById(R.id.textViewRegister);
         buttonLogin = findViewById(R.id.buttonLogin);
     }
+
 }

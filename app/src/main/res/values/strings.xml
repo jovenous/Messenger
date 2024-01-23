@@ -17,4 +17,6 @@
     <string name="forgot_password_title">Forgot password?</string>
     <string name="reset_password">Reset password</string>
     <string name="reset_link_sent">The reset link has been successfully sent</string>
+    <string name="please_fill_all_fields">Please fill all fields!</string>
+    <string name="are_should_be_positive">аге шуд бі позітів валує</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +35,10 @@ public class RegistrationActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(RegistrationViewModel.class);
         observeViewModel();
 
+        setupClickListeners();
+    }
+
+    private void setupClickListeners() {
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,10 +46,93 @@ public class RegistrationActivity extends AppCompatActivity {
                 String password = getTrimmedValue(editTextPassword);
                 String name = getTrimmedValue(editTextName);
                 String surname = getTrimmedValue(editTextSurname);
-                int age = Integer.parseInt(getTrimmedValue(editTextAge));
-                viewModel.signUp(email, password, name, surname, age);
+                int age = parseIntAge();
+
+                validateEmailEditText(email);
+                validatePasswordEditText(password);
+                validateNameEditText(name);
+                validateSurnameEditText(surname);
+                validateAgeEditText(age);
+
+                signUpUser(email, password, name, surname, age);
             }
         });
+    }
+
+    private int parseIntAge() {
+        int age = 0;
+        try {
+            age = Integer.parseInt(getTrimmedValue(editTextAge));
+        } catch (Exception e) {
+            e.printStackTrace();
+//            editTextAge.setError("Error editTextAge");
+//            Log.d("RegistrationActivity", "Catch body");
+//            editTextAge.setBackgroundResource(R.drawable.error_background);
+        }
+        return age;
+    }
+
+    private void signUpUser(
+            String email,
+            String password,
+            String name,
+            String surname,
+            int age
+    ) {
+        if (!email.isEmpty() &&
+                !password.isEmpty() &&
+                !name.isEmpty() &&
+                !surname.isEmpty() &&
+                age > 0
+        ) {
+            viewModel.signUp(email, password, name, surname, age);
+        }
+    }
+
+    private void validateAgeEditText(int age) {
+        if (age <= 0) {
+            editTextAge.setError(getString(R.string.are_should_be_positive));
+            Log.d("RegistrationActivity", "ValidateAge Body");
+            editTextAge.setBackgroundResource(R.drawable.error_background);
+        } else {
+            editTextAge.setBackgroundResource(R.drawable.normal_background);
+        }
+    }
+
+    private void validateSurnameEditText(String surname) {
+        if (surname.isEmpty()) {
+            editTextSurname.setError("Fill the field!");
+            editTextSurname.setBackgroundResource(R.drawable.error_background);
+        } else {
+            editTextSurname.setBackgroundResource(R.drawable.normal_background);
+        }
+    }
+
+    private void validateNameEditText(String name) {
+        if (name.isEmpty()) {
+            editTextName.setError("Fill the field!");
+            editTextName.setBackgroundResource(R.drawable.error_background);
+        } else {
+            editTextName.setBackgroundResource(R.drawable.normal_background);
+        }
+    }
+
+    private void validatePasswordEditText(String password) {
+        if (password.isEmpty()) {
+            editTextPassword.setError("Fill the field!");
+            editTextPassword.setBackgroundResource(R.drawable.error_background);
+        } else {
+            editTextPassword.setBackgroundResource(R.drawable.normal_background);
+        }
+    }
+
+    private void validateEmailEditText(String email) {
+        if (email.isEmpty()) {
+            editTextEmail.setError("Fill the field!");
+            editTextEmail.setBackgroundResource(R.drawable.error_background);
+        } else {
+            editTextEmail.setBackgroundResource(R.drawable.normal_background);
+        }
     }
 
     private void observeViewModel() {
@@ -64,11 +152,10 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onChanged(String errorMessage) {
                 if (errorMessage != null) {
                     Toast.makeText(
-                                    RegistrationActivity.this,
-                                    errorMessage,
-                                    Toast.LENGTH_SHORT
-                            )
-                            .show();
+                            RegistrationActivity.this,
+                            errorMessage,
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             }
         });
