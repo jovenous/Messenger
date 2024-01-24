@@ -65,9 +65,9 @@ public class RegistrationActivity extends AppCompatActivity {
             age = Integer.parseInt(getTrimmedValue(editTextAge));
         } catch (Exception e) {
             e.printStackTrace();
-//            editTextAge.setError("Error editTextAge");
-//            Log.d("RegistrationActivity", "Catch body");
-//            editTextAge.setBackgroundResource(R.drawable.error_background);
+            editTextAge.setError("Error editTextAge");
+            Log.d("RegistrationActivity", "Catch body");
+            editTextAge.setBackgroundResource(R.drawable.error_background);
         }
         return age;
     }
