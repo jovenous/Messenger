@@ -19,4 +19,5 @@
     <string name="reset_link_sent">The reset link has been successfully sent</string>
     <string name="please_fill_all_fields">Please fill all fields!</string>
     <string name="are_should_be_positive">аге шуд бі позітів валує</string>
+    <string name="type_your_message">Type your message:</string>
 </resources>
