@@ -6,14 +6,14 @@ public class User {
     private String name;
     private String surname;
     private int age;
-    private boolean isOnline;
+    private boolean online;
 
-    public User(String id, String name, String surname, int age, boolean isOnline) {
+    public User(String id, String name, String surname, int age, boolean online) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.age = age;
-        this.isOnline = isOnline;
+        this.online = online;
     }
 
     public User() {
@@ -36,7 +36,7 @@ public class User {
     }
 
     public boolean isOnline() {
-        return isOnline;
+        return online;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
-                ", isOnline=" + isOnline +
+                ", isOnline=" + online +
                 '}';
     }
 }
